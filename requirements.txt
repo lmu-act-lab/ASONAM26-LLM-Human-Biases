@@ -1,0 +1,17 @@
+pandas
+numpy
+matplotlib
+scikit-learn
+scipy
+statsmodels
+tqdm
+requests
+beautifulsoup4
+chardet
+openai
+google-genai
+ollama
+pydantic
+python-dotenv
+tenacity
+typing-extensions
