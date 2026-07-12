@@ -169,3 +169,6 @@ result_data/
 data/prompts/
 
 *.sh
+!examples/
+!examples/model_runner/
+!examples/model_runner/*.sh

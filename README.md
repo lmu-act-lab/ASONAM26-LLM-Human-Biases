@@ -64,3 +64,74 @@ python generate_prompts_for_indexes.py
 ```
 
 - Outputs saved to: data/prompts/cot/
+
+### 2. Run Model Inference
+
+The runner scripts live in [examples/model_runner](examples/model_runner). Each script resolves the repository root internally, so you can launch them either from the repository root or by first changing into that folder. The Python command they call runs [src/model_runner/main.py](src/model_runner/main.py) from the repository root, reads prompts from `data/prompts`, and writes outputs to `results/`.
+
+#### OpenAI
+
+Use the OpenAI script when you want to run `gpt-*` models or other OpenAI-compatible model names:
+
+```bash
+cd examples/model_runner
+bash openai_batch_runner.sh [file_type] [version1 version2 ...]
+```
+
+Examples:
+
+```bash
+bash openai_batch_runner.sh
+bash openai_batch_runner.sh all direct
+bash openai_batch_runner.sh politics direct cot
+```
+
+#### Gemini
+
+Use the Gemini script for Gemini models:
+
+```bash
+cd examples/model_runner
+bash gemini_runner.sh [file_type] [version1 version2 ...]
+```
+
+#### Ollama
+
+Use the Ollama script for local Ollama models:
+
+```bash
+cd examples/model_runner
+bash ollama_runner.sh [file_type] [version1 version2 ...]
+```
+
+#### Parameters You Can Change
+
+The first argument is `file_type`. Use `all` to run every prompt family, or pass a specific prompt family name supported by the runner. The remaining arguments are prompt `version` values. If you pass more than one version, the script runs them one after another. For example, you want to run the experiment 2 times, you can have `direct-1` and `direct-2`.
+
+To change the model, temperature, worker count, checkpoint size, context length, or provider-specific settings, edit the variables near the top of the bash script. The most important ones are:
+
+- `MODEL`
+- `FILE_TYPE`
+- `TEMP`
+- `WORKERS`
+- `CHECKPOINT`
+- `CTX_LEN`
+- `PORT` for Ollama
+- `POLL_INTERVAL` for OpenAI batch runs
+
+If you want full control without editing the shell script, call [src/model_runner/main.py](src/model_runner/main.py) directly and pass CLI flags such as:
+
+```bash
+python src/model_runner/main.py \
+	--provider openai \
+	--file-type all \
+	--model gpt-5.4-mini \
+	--version direct \
+	--prompt-dir data/prompts \
+	--output-dir results \
+	--workers 8 \
+	--checkpoint-size 100 \
+	--model-temperature 0.5
+```
+
+Available flags include `--provider`, `--file-type`, `--model`, `--version`, `--output-dir`, `--workers`, `--checkpoint-size`, `--model-temperature`, `--context-length`, `--include-explanation`, `--include-prompted-cot`, `--include-native-cot`, `--include-chained-prompts`, `--reasoning-effort`, `--reasoning-summary`, `--openai-mode`, and `--ollama-server-port`.
