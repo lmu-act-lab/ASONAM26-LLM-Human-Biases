@@ -1,8 +1,8 @@
 from pathlib import Path
 from itertools import combinations
 
-from src.analysis.core.constants import Constants
-from src.analysis.core.utils import Utils
+from core.constants import Constants
+from core.utils import Utils
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -19,61 +19,310 @@ BAR_WIDTH = 0.65
 human_df = utils.load_human_data()
 
 
-def compute_inter_rater_reliability(data_path):
-    """Computes pooled and per-pair inter-rater agreement (Cohen's Kappa)."""
-    raw_cols = ["WorkerId", "Answer.articleNumber", "Answer.bias-question"]
-    df = pd.read_csv(data_path, usecols=raw_cols).rename(
-        columns={"Answer.articleNumber": "article_number", "Answer.bias-question": "bias_question"}
+def compute_inter_rater_reliability(
+    data_path,
+    n_simulations=10_000,
+    random_state=42,
+):
+    """
+    Estimate an article-balanced human-human Cohen's kappa baseline.
+
+    In each simulation:
+      1. Keep articles with at least two valid human annotations.
+      2. Sample two distinct annotations from each eligible article.
+      3. Treat the sampled labels as ratings from two pseudo-raters.
+      4. Compute Cohen's kappa across eligible articles.
+
+    Each article contributes exactly one human-human comparison per
+    simulation, regardless of whether it has 2 or 45 annotators.
+
+    Parameters
+    ----------
+    data_path : str or pathlib.Path
+        Path to the raw human annotation CSV.
+
+    n_simulations : int, default=10_000
+        Number of random pseudo-rater simulations.
+
+    random_state : int, default=42
+        Seed used for reproducible sampling.
+
+    Returns
+    -------
+    summary_df : pandas.DataFrame
+        One-row summary of the sampled human-human kappa distribution.
+
+    simulation_df : pandas.DataFrame
+        One row per simulation, including Cohen's kappa, raw agreement,
+        and the two pseudo-raters' bias prediction rates.
+    """
+    if n_simulations < 1:
+        raise ValueError("n_simulations must be at least 1.")
+
+    raw_cols = [
+        "WorkerId",
+        "Answer.articleNumber",
+        "Answer.bias-question",
+    ]
+
+    df = (
+        pd.read_csv(data_path, usecols=raw_cols)
+        .rename(
+            columns={
+                "Answer.articleNumber": "article_number",
+                "Answer.bias-question": "bias_question",
+            }
+        )
     )
-    
-    df["bias_question"] = df["bias_question"].astype(str).str.strip().str.lower()
-    df["label"] = df["bias_question"].map(Constants.LABEL_MAP)
-    df = df.dropna(subset=["WorkerId", "article_number", "label"]).copy()
+
+    df["bias_question"] = (
+        df["bias_question"]
+        .astype("string")
+        .str.strip()
+        .str.lower()
+    )
+
+    normalized_label_map = {
+        str(label_name).strip().lower(): label_value
+        for label_name, label_value in Constants.LABEL_MAP.items()
+    }
+
+    df["label"] = df["bias_question"].map(normalized_label_map)
+
+    df = df.dropna(
+        subset=[
+            "WorkerId",
+            "article_number",
+            "label",
+        ]
+    ).copy()
+
     df["label"] = df["label"].astype(int)
-    
-    df = df.drop_duplicates(subset=["WorkerId", "article_number"], keep="first")
-    
-    pair_rows = []
-    for _, sub in df.groupby("article_number"):
-        if len(sub) < 2:
-            continue
-        records = sub[["WorkerId", "label"]].to_records(index=False)
-        for (w_a, l_a), (w_b, l_b) in combinations(records, 2):
-            w_a, w_b = sorted([w_a, w_b])
-            pair_rows.append({"WorkerId_A": w_a, "WorkerId_B": w_b, "label_a": int(l_a), "label_b": int(l_b)})
-            
-    if not pair_rows:
-        return pd.DataFrame([{
-            "N_Workers": df["WorkerId"].nunique(), "N_Articles": df["article_number"].nunique(),
-            "N_Annotations": len(df), "N_Annotation_Pairs": 0, "Pooled_Raw_Agreement": np.nan,
-            "Pooled_Cohen_Kappa": np.nan, "Worker_Pairs_With_Overlap": 0, "Worker_Pairs_With_Kappa": 0
-        }]), pd.DataFrame(columns=["WorkerId_A", "WorkerId_B", "N_Shared", "Cohen_Kappa", "Raw_Agreement"])
 
-    pair_df = pd.DataFrame(pair_rows)
-    pooled_raw = (pair_df["label_a"] == pair_df["label_b"]).mean()
-    pooled_kappa = cohen_kappa_score(pair_df["label_a"], pair_df["label_b"])
-    
-    worker_pair_rows = []
-    for (w_a, w_b), sub in pair_df.groupby(["WorkerId_A", "WorkerId_B"]):
-        n_shared = len(sub)
-        raw_agree = (sub["label_a"] == sub["label_b"]).mean()
+    unexpected_labels = set(df["label"].unique()) - {0, 1}
+    if unexpected_labels:
+        raise ValueError(
+            "Human labels must be binary values 0 and 1. "
+            f"Unexpected values: {sorted(unexpected_labels)}"
+        )
 
-        has_variance = sub["label_a"].nunique() >= 2 and sub["label_b"].nunique() >= 2
-        kappa = cohen_kappa_score(sub["label_a"], sub["label_b"]) if (n_shared >= 2 and has_variance) else np.nan
-        
-        worker_pair_rows.append({
-            "WorkerId_A": w_a, "WorkerId_B": w_b, "N_Shared": n_shared, "Cohen_Kappa": kappa, "Raw_Agreement": raw_agree
-        })
-        
-    wp_kappa_df = pd.DataFrame(worker_pair_rows)
-    summary_df = pd.DataFrame([{
-        "N_Workers": df["WorkerId"].nunique(), "N_Articles": df["article_number"].nunique(),
-        "N_Annotations": len(df), "N_Annotation_Pairs": len(pair_df),
-        "Pooled_Raw_Agreement": pooled_raw, "Pooled_Cohen_Kappa": pooled_kappa,
-        "Worker_Pairs_With_Overlap": len(wp_kappa_df), "Worker_Pairs_With_Kappa": wp_kappa_df["Cohen_Kappa"].notna().sum()
-    }])
-    
-    return summary_df, wp_kappa_df
+    df = df.drop_duplicates(
+        subset=["WorkerId", "article_number"],
+        keep="first",
+    )
+
+    n_workers = df["WorkerId"].nunique()
+    n_total_articles = df["article_number"].nunique()
+    n_annotations = len(df)
+
+    labels_by_article = {
+        article_number: sub["label"].to_numpy(dtype=np.int8)
+        for article_number, sub in df.groupby(
+            "article_number",
+            sort=True,
+        )
+        if len(sub) >= 2
+    }
+
+    n_eligible_articles = len(labels_by_article)
+    n_single_rater_articles = (
+        n_total_articles - n_eligible_articles
+    )
+
+    if n_eligible_articles < 2:
+        empty_summary = pd.DataFrame(
+            [
+                {
+                    "N_Workers": n_workers,
+                    "N_Total_Articles": n_total_articles,
+                    "N_Eligible_Articles": n_eligible_articles,
+                    "N_Excluded_Single_Rater_Articles": (
+                        n_single_rater_articles
+                    ),
+                    "N_Annotations": n_annotations,
+                    "N_Simulations": n_simulations,
+                    "N_Valid_Simulations": 0,
+                    "Mean_Cohen_Kappa": np.nan,
+                    "Median_Cohen_Kappa": np.nan,
+                    "SD_Cohen_Kappa": np.nan,
+                    "Kappa_2.5_Percentile": np.nan,
+                    "Kappa_25_Percentile": np.nan,
+                    "Kappa_75_Percentile": np.nan,
+                    "Kappa_97.5_Percentile": np.nan,
+                    "Mean_Raw_Agreement": np.nan,
+                    "Mean_Pseudo_Rater_A_Bias_Rate": np.nan,
+                    "Mean_Pseudo_Rater_B_Bias_Rate": np.nan,
+                }
+            ]
+        )
+
+        empty_simulations = pd.DataFrame(
+            columns=[
+                "Simulation",
+                "Cohen_Kappa",
+                "Raw_Agreement",
+                "Pseudo_Rater_A_Bias_Rate",
+                "Pseudo_Rater_B_Bias_Rate",
+            ]
+        )
+
+        return empty_summary, empty_simulations
+
+    article_ids = list(labels_by_article.keys())
+    rng = np.random.default_rng(random_state)
+
+    simulation_rows = []
+
+    # ---------------------------------------------------------
+    # Repeatedly construct two pseudo-human raters
+    # ---------------------------------------------------------
+    for simulation_number in range(1, n_simulations + 1):
+        pseudo_rater_a = np.empty(
+            n_eligible_articles,
+            dtype=np.int8,
+        )
+        pseudo_rater_b = np.empty(
+            n_eligible_articles,
+            dtype=np.int8,
+        )
+
+        for article_position, article_id in enumerate(article_ids):
+            article_labels = labels_by_article[article_id]
+
+            # Sampling without replacement guarantees that the two
+            # labels come from two distinct human annotation rows.
+            selected_indices = rng.choice(
+                len(article_labels),
+                size=2,
+                replace=False,
+            )
+
+            pseudo_rater_a[article_position] = article_labels[
+                selected_indices[0]
+            ]
+            pseudo_rater_b[article_position] = article_labels[
+                selected_indices[1]
+            ]
+
+        raw_agreement = np.mean(
+            pseudo_rater_a == pseudo_rater_b
+        )
+
+        kappa = cohen_kappa_score(
+            pseudo_rater_a,
+            pseudo_rater_b,
+        )
+
+        # Kappa can be undefined when expected agreement is exactly 1,
+        # such as when both sampled raters use only one label.
+        if not np.isfinite(kappa):
+            kappa = np.nan
+
+        simulation_rows.append(
+            {
+                "Simulation": simulation_number,
+                "Cohen_Kappa": kappa,
+                "Raw_Agreement": raw_agreement,
+                "Pseudo_Rater_A_Bias_Rate": (
+                    pseudo_rater_a.mean()
+                ),
+                "Pseudo_Rater_B_Bias_Rate": (
+                    pseudo_rater_b.mean()
+                ),
+            }
+        )
+
+    simulation_df = pd.DataFrame(simulation_rows)
+    valid_kappas = simulation_df["Cohen_Kappa"].dropna()
+
+    # ---------------------------------------------------------
+    # Exact article-balanced pairwise raw agreement
+    # ---------------------------------------------------------
+    #
+    # For article i:
+    #
+    #   agreement_i =
+    #       [n0(n0 - 1) + n1(n1 - 1)] /
+    #       [n(n - 1)]
+    #
+    # This is the probability that two distinct randomly selected
+    # annotations from the article agree.
+    article_agreements = []
+
+    for article_labels in labels_by_article.values():
+        n_raters = len(article_labels)
+        n_biased = int(article_labels.sum())
+        n_not_biased = n_raters - n_biased
+
+        article_pairwise_agreement = (
+            n_biased * (n_biased - 1)
+            + n_not_biased * (n_not_biased - 1)
+        ) / (n_raters * (n_raters - 1))
+
+        article_agreements.append(article_pairwise_agreement)
+
+    mean_exact_pairwise_agreement = float(
+        np.mean(article_agreements)
+    )
+
+    if valid_kappas.empty:
+        mean_kappa = np.nan
+        median_kappa = np.nan
+        sd_kappa = np.nan
+        q025 = np.nan
+        q25 = np.nan
+        q75 = np.nan
+        q975 = np.nan
+    else:
+        mean_kappa = valid_kappas.mean()
+        median_kappa = valid_kappas.median()
+        sd_kappa = valid_kappas.std(ddof=1)
+        q025 = valid_kappas.quantile(0.025)
+        q25 = valid_kappas.quantile(0.25)
+        q75 = valid_kappas.quantile(0.75)
+        q975 = valid_kappas.quantile(0.975)
+
+    summary_df = pd.DataFrame(
+        [
+            {
+                "N_Workers": n_workers,
+                "N_Total_Articles": n_total_articles,
+                "N_Eligible_Articles": n_eligible_articles,
+                "N_Excluded_Single_Rater_Articles": (
+                    n_single_rater_articles
+                ),
+                "N_Annotations": n_annotations,
+                "N_Simulations": n_simulations,
+                "N_Valid_Simulations": len(valid_kappas),
+                "Mean_Cohen_Kappa": mean_kappa,
+                "Median_Cohen_Kappa": median_kappa,
+                "SD_Cohen_Kappa": sd_kappa,
+                "Kappa_2.5_Percentile": q025,
+                "Kappa_25_Percentile": q25,
+                "Kappa_75_Percentile": q75,
+                "Kappa_97.5_Percentile": q975,
+                "Mean_Sampled_Raw_Agreement": (
+                    simulation_df["Raw_Agreement"].mean()
+                ),
+                "Mean_Exact_Pairwise_Raw_Agreement": (
+                    mean_exact_pairwise_agreement
+                ),
+                "Mean_Pseudo_Rater_A_Bias_Rate": (
+                    simulation_df[
+                        "Pseudo_Rater_A_Bias_Rate"
+                    ].mean()
+                ),
+                "Mean_Pseudo_Rater_B_Bias_Rate": (
+                    simulation_df[
+                        "Pseudo_Rater_B_Bias_Rate"
+                    ].mean()
+                ),
+                "Random_State": random_state,
+            }
+        ]
+    )
+
+    return summary_df, simulation_df
 
 
 # =========================================================
@@ -192,7 +441,11 @@ utils.save_figure(fig, "human_bias_rate_by_politics")
 # =========================================================
 # Human crowdworker agreement (Cohen's kappa) & File Saves
 # =========================================================
-summary_row, worker_pair_kappa = compute_inter_rater_reliability(Path("../../data/news_bias_full_data.csv"))
+summary_row, sampled_human_kappa = compute_inter_rater_reliability(
+    Path("../../data/news_bias_full_data.csv"),
+    n_simulations=10_000,
+    random_state=42,
+)
 
 # Save CSV metrics
 utils.save_csv(voters_per_article.describe(), "voters_summary.csv")
@@ -201,15 +454,53 @@ utils.save_csv(consensus_df, "human_consensus_by_article.csv", index=False)
 utils.save_csv(consensus_counts, "human_consensus_category_counts.csv", header=["count"])
 utils.save_csv(politics_counts, "political_group_counts.csv", header=["count"])
 utils.save_csv(human_bias_by_politics, "human_bias_rate_by_politics.csv", header=["bias_rate"])
-utils.save_csv(summary_row, "human_crowdworker_kappa_summary.csv", index=False)
-utils.save_csv(worker_pair_kappa, "human_crowdworker_worker_pair_kappa.csv", index=False)
+utils.save_csv(summary_row, "sampled_human_human_kappa_summary.csv",index=False)
+utils.save_csv(sampled_human_kappa, "sampled_human_human_kappa_simulations.csv",index=False)
 
-# Console Output Logs
-print("\nHuman crowdworker agreement:")
+print("\nSampled human-human agreement:")
 print(summary_row.to_string(index=False))
 
-if worker_pair_kappa["Cohen_Kappa"].notna().sum() == 0:
-    print("No worker pair had enough shared items for per-pair Cohen's kappa; saved pooled pairwise agreement only.")
+valid_simulations = sampled_human_kappa[
+    "Cohen_Kappa"
+].notna().sum()
+
+if valid_simulations == 0:
+    print(
+        "Cohen's kappa was undefined in all pseudo-rater "
+        "simulations."
+    )
+else:
+    mean_kappa = summary_row.loc[
+        0,
+        "Mean_Cohen_Kappa",
+    ]
+    median_kappa = summary_row.loc[
+        0,
+        "Median_Cohen_Kappa",
+    ]
+    lower = summary_row.loc[
+        0,
+        "Kappa_2.5_Percentile",
+    ]
+    upper = summary_row.loc[
+        0,
+        "Kappa_97.5_Percentile",
+    ]
+    eligible = summary_row.loc[
+        0,
+        "N_Eligible_Articles",
+    ]
+
+    print(
+        f"\nHuman-human sampled Cohen's kappa "
+        f"across {eligible} eligible articles:"
+    )
+    print(f"  Mean: {mean_kappa:.4f}")
+    print(f"  Median: {median_kappa:.4f}")
+    print(
+        f"  95% simulation interval: "
+        f"[{lower:.4f}, {upper:.4f}]"
+    )
 
 print(f"\nSaved figures to:\n{utils.figure_dir}")
 print(f"\nSaved CSV files to:\n{utils.csv_dir}")

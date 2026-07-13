@@ -1,0 +1,61 @@
+Model,Model_Display,N,n00,n01,n10,n11,McNemar_statistic,p_value,significance,Test_Type,Comparison
+gemini-2.5-flash-lite,Gemini 2.5,215,151,16,14,34,0.03333333333333333,0.8551321405847059,ns,Prediction change,CoT vs Direct
+gemma3_27b,Gemma3 27B,218,54,75,3,86,64.62820512820512,9.045128099981025e-16,***,Prediction change,CoT vs Direct
+gpt-4o-mini,GPT-4o mini,218,105,37,11,65,13.020833333333334,0.0003080447056277469,***,Prediction change,CoT vs Direct
+gpt-5.4-mini,GPT-5.4 mini,218,130,38,4,46,25.928571428571427,3.5428638720887997e-07,***,Prediction change,CoT vs Direct
+llama3.2_3b,Llama 3.2 3B,218,56,29,36,97,0.5538461538461539,0.4567504024231692,ns,Prediction change,CoT vs Direct
+llama4_scout,Llama 4 Scout,218,129,1,45,43,40.19565217391305,2.2975902603763262e-10,***,Prediction change,CoT vs Direct
+phi4-mini,Phi4 mini,218,105,37,51,25,1.9204545454545454,0.16580656019400952,ns,Prediction change,CoT vs Direct
+qwen3_30b,Qwen3 30B,218,163,36,3,16,26.256410256410255,2.9896083005409287e-07,***,Prediction change,CoT vs Direct
+qwen3_4b,Qwen3 4B,218,173,31,5,9,17.36111111111111,3.0908593764592035e-05,***,Prediction change,CoT vs Direct
+r1-1776_latest,R1-1776,218,59,30,39,90,0.927536231884058,0.3355039530729915,ns,Prediction change,CoT vs Direct
+gemini-2.5-flash-lite,Gemini 2.5,215,107,60,7,41,40.35820895522388,2.1141526768399171e-10,***,Prediction change,Chained CoT vs Direct
+gemma3_27b,Gemma3 27B,218,0,129,0,89,127.0077519379845,1.8504929373502249e-29,***,Prediction change,Chained CoT vs Direct
+gpt-4o-mini,GPT-4o mini,218,0,142,0,76,140.00704225352112,2.6526122171595693e-32,***,Prediction change,Chained CoT vs Direct
+gpt-5.4-mini,GPT-5.4 mini,218,15,153,0,50,151.00653594771242,1.044623212667308e-34,***,Prediction change,Chained CoT vs Direct
+llama3.2_3b,Llama 3.2 3B,218,19,66,7,126,46.082191780821915,1.1339450622946896e-11,***,Prediction change,Chained CoT vs Direct
+llama4_scout,Llama 4 Scout,218,113,17,33,55,4.5,0.033894853524689315,*,Prediction change,Chained CoT vs Direct
+phi4-mini,Phi4 mini,218,21,121,8,68,97.24031007751938,6.140377104836811e-23,***,Prediction change,Chained CoT vs Direct
+qwen3_30b,Qwen3 30B,218,36,163,1,18,158.0548780487805,3.0105777023251265e-36,***,Prediction change,Chained CoT vs Direct
+qwen3_4b,Qwen3 4B,218,66,138,2,12,130.17857142857142,3.745228462924309e-30,***,Prediction change,Chained CoT vs Direct
+r1-1776_latest,R1-1776,218,17,72,5,124,56.57142857142857,5.4193579504568196e-14,***,Prediction change,Chained CoT vs Direct
+gemini-2.5-flash-lite,Gemini 2.5,215,106,59,8,42,37.3134328358209,1.0058936489518226e-09,***,Prediction change,Chained CoT vs CoT
+gemma3_27b,Gemma3 27B,218,0,57,0,161,55.01754385964912,1.1945875640684346e-13,***,Prediction change,Chained CoT vs CoT
+gpt-4o-mini,GPT-4o mini,218,0,116,0,102,114.00862068965517,1.2974319916756597e-26,***,Prediction change,Chained CoT vs CoT
+gpt-5.4-mini,GPT-5.4 mini,218,14,120,1,83,115.07438016528926,7.580035299973961e-27,***,Prediction change,Chained CoT vs CoT
+llama3.2_3b,Llama 3.2 3B,218,20,72,6,120,54.166666666666664,1.841849795496321e-13,***,Prediction change,Chained CoT vs CoT
+llama4_scout,Llama 4 Scout,218,140,34,6,38,18.225,1.962854058695214e-05,***,Prediction change,Chained CoT vs CoT
+phi4-mini,Phi4 mini,218,24,132,5,57,115.88321167883211,5.04127078824521e-27,***,Prediction change,Chained CoT vs CoT
+qwen3_30b,Qwen3 30B,218,37,129,0,52,127.0077519379845,1.8504929373502249e-29,***,Prediction change,Chained CoT vs CoT
+qwen3_4b,Qwen3 4B,218,62,116,6,34,97.38524590163935,5.706969392875058e-23,***,Prediction change,Chained CoT vs CoT
+r1-1776_latest,R1-1776,218,15,83,7,113,62.5,2.6644463892359247e-15,***,Prediction change,Chained CoT vs CoT
+gemini-2.5-flash-lite,Gemini 2.5,215,108,21,9,77,4.033333333333333,0.044609718024939626,*,Alignment change,CoT vs Direct
+gemma3_27b,Gemma3 27B,218,56,46,32,84,2.1666666666666665,0.14103164052071218,ns,Alignment change,CoT vs Direct
+gpt-4o-mini,GPT-4o mini,218,82,27,21,88,0.5208333333333334,0.47048642205878954,ns,Alignment change,CoT vs Direct
+gpt-5.4-mini,GPT-5.4 mini,218,87,24,18,89,0.5952380952380952,0.4404006981390033,ns,Alignment change,CoT vs Direct
+llama3.2_3b,Llama 3.2 3B,218,58,36,29,95,0.5538461538461539,0.4567504024231692,ns,Alignment change,CoT vs Direct
+llama4_scout,Llama 4 Scout,218,94,23,23,78,0.021739130434782608,0.882783191152826,ns,Alignment change,CoT vs Direct
+phi4-mini,Phi4 mini,218,81,44,44,49,0.011363636363636364,0.9151060344205056,ns,Alignment change,CoT vs Direct
+qwen3_30b,Qwen3 30B,218,98,28,11,81,6.564102564102564,0.010405619868873592,*,Alignment change,CoT vs Direct
+qwen3_4b,Qwen3 4B,218,104,25,11,78,4.694444444444445,0.03026028002047163,*,Alignment change,CoT vs Direct
+r1-1776_latest,R1-1776,218,62,36,33,87,0.057971014492753624,0.80973205979319,ns,Alignment change,CoT vs Direct
+gemini-2.5-flash-lite,Gemini 2.5,215,85,44,23,63,5.970149253731344,0.014550049247422014,*,Alignment change,Chained CoT vs Direct
+gemma3_27b,Gemma3 27B,218,25,77,52,64,4.465116279069767,0.034593735040723585,*,Alignment change,Chained CoT vs Direct
+gpt-4o-mini,GPT-4o mini,218,22,87,55,54,6.767605633802817,0.009282729146652794,**,Alignment change,Chained CoT vs Direct
+gpt-5.4-mini,GPT-5.4 mini,218,19,92,61,46,5.882352941176471,0.015293371030198967,*,Alignment change,Chained CoT vs Direct
+llama3.2_3b,Llama 3.2 3B,218,52,42,31,93,1.36986301369863,0.24183542123690713,ns,Alignment change,Chained CoT vs Direct
+llama4_scout,Llama 4 Scout,218,90,27,23,78,0.18,0.6713732405408727,ns,Alignment change,Chained CoT vs Direct
+phi4-mini,Phi4 mini,218,43,82,47,46,8.96124031007752,0.0027576761095648872,**,Alignment change,Chained CoT vs Direct
+qwen3_30b,Qwen3 30B,218,20,106,58,34,13.46951219512195,0.00024247134097106629,***,Alignment change,Chained CoT vs Direct
+qwen3_4b,Qwen3 4B,218,43,86,54,35,6.864285714285714,0.008793539075659178,**,Alignment change,Chained CoT vs Direct
+r1-1776_latest,R1-1776,218,49,49,28,92,5.194805194805195,0.022654494080089342,*,Alignment change,Chained CoT vs Direct
+gemini-2.5-flash-lite,Gemini 2.5,215,79,38,29,69,0.9552238805970149,0.32839315835530963,ns,Alignment change,Chained CoT vs CoT
+gemma3_27b,Gemma3 27B,218,54,34,23,107,1.7543859649122806,0.1853263041985758,ns,Alignment change,Chained CoT vs CoT
+gpt-4o-mini,GPT-4o mini,218,32,71,45,70,5.387931034482759,0.020276498478674788,*,Alignment change,Chained CoT vs CoT
+gpt-5.4-mini,GPT-5.4 mini,218,32,73,48,65,4.760330578512397,0.029122954152385052,*,Alignment change,Chained CoT vs CoT
+llama3.2_3b,Llama 3.2 3B,218,46,41,37,94,0.11538461538461539,0.7340951823194757,ns,Alignment change,Chained CoT vs CoT
+llama4_scout,Llama 4 Scout,218,95,22,18,83,0.225,0.6352562959972483,ns,Alignment change,Chained CoT vs CoT
+phi4-mini,Phi4 mini,218,39,86,51,42,8.437956204379562,0.0036746901252659074,**,Alignment change,Chained CoT vs CoT
+qwen3_30b,Qwen3 30B,218,29,80,49,60,6.976744186046512,0.008257570114301211,**,Alignment change,Chained CoT vs CoT
+qwen3_4b,Qwen3 4B,218,45,70,52,51,2.3688524590163933,0.12377800977274939,ns,Alignment change,Chained CoT vs CoT
+r1-1776_latest,R1-1776,218,41,54,36,87,3.2111111111111112,0.07313979965890871,ns,Alignment change,Chained CoT vs CoT

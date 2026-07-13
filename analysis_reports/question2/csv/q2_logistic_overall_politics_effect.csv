@@ -1,0 +1,11 @@
+Model,Model_Display,LR_statistic,df,overall_p_value,overall_significance,interpretation
+gemini-2.5-flash-lite,Gemini 2.5,20.551462630305195,2.0,3.445931121047572e-05,***,Accuracy differs by political group
+gemma3_27b,Gemma3 27B,7.7223284585888905,2.0,0.02104348581337968,*,Accuracy differs by political group
+gpt-4o-mini,GPT-4o mini,26.836466475508587,2.0,1.4877684611091008e-06,***,Accuracy differs by political group
+gpt-5.4-mini,GPT-5.4 mini,4.000749941244067,2.0,0.13528454599435655,ns,No significant overall political-group difference
+llama3.2_3b,Llama 3.2 3B,7.510552005381669,2.0,0.023393992913087924,*,Accuracy differs by political group
+llama4_scout,Llama 4 Scout,9.120779918879634,2.0,0.010457979960152592,*,Accuracy differs by political group
+phi4-mini,Phi4 mini,12.207344610244036,2.0,0.0022346463298365364,**,Accuracy differs by political group
+qwen3_30b,Qwen3 30B,40.64373685493774,2.0,1.4939108448740642e-09,***,Accuracy differs by political group
+qwen3_4b,Qwen3 4B,32.85174235924751,2.0,7.350803039479089e-08,***,Accuracy differs by political group
+r1-1776_latest,R1-1776,13.698144675534877,2.0,0.0010604389659431084,**,Accuracy differs by political group

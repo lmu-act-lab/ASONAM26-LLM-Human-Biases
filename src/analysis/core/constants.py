@@ -114,3 +114,27 @@ class Constants:
     LEGEND_LOCATIONS = {
         "lower_right": "lower right",
     }
+    
+    PROMPT_FILES = {
+        "article_only": "prompt_article_info.csv",
+        "source": "prompt_source_variants.csv",
+        "politics": "prompt_politics_variants.csv",
+        "source_politics": "prompt_source_politics_variants.csv",
+        "politics_demographic": "prompt_politics_pii_variants.csv",
+        "source_demographic": "prompt_source_pii_variants.csv",
+        "source_politics_demographic": "prompt_pii_combined_variants.csv",
+    }
+    
+    METADATA_ORDER = [
+        "source", "politics", "source_politics", 
+        "source_demographic", "politics_demographic", "source_politics_demographic"
+    ]
+
+    METADATA_LABELS = {
+        "source": "Source",
+        "politics": "Politics",
+        "source_politics": "Source + Politics",
+        "source_demographic": "Source + Demographic",
+        "politics_demographic": "Politics + Demographic",
+        "source_politics_demographic": "Source + Politics + Demographic",
+    }

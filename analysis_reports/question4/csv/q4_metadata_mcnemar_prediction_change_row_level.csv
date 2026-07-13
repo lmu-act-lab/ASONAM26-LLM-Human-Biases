@@ -1,0 +1,61 @@
+Model,Model_Display,N,n00,n01,n10,n11,McNemar_statistic,p_value,significance,Test_Type,Metadata_Condition,Metadata_Label
+gemini-2.5-flash-lite,Gemini 2.5,2179,1832,31,171,145,95.64851485148515,1.3720258510540583e-22,***,Prediction change,source,Source
+gemma3_27b,Gemma3 27B,2179,1427,282,106,355,78.93041237113403,6.433667694297235e-19,***,Prediction change,source,Source
+gpt-4o-mini,GPT-4o mini,2179,1912,79,87,101,0.29518072289156627,0.5869195689340558,ns,Prediction change,source,Source
+gpt-5.4-mini,GPT-5.4 mini,2179,1614,52,110,403,20.055555555555557,7.522468307632614e-06,***,Prediction change,source,Source
+llama3.2_3b,Llama 3.2 3B,2179,867,203,35,1074,117.18067226890756,2.6207290766017913e-27,***,Prediction change,source,Source
+llama4_scout,Llama 4 Scout,2179,1444,35,90,610,23.328,1.3659695054556285e-06,***,Prediction change,source,Source
+phi4-mini,Phi4 mini,2179,491,33,382,1273,291.8168674698795,1.9983958898380065e-65,***,Prediction change,source,Source
+qwen3_30b,Qwen3 30B,2179,2079,48,28,24,4.75,0.02929829440455058,*,Prediction change,source,Source
+qwen3_4b,Qwen3 4B,2179,2026,72,56,25,1.7578125,0.18489759896559638,ns,Prediction change,source,Source
+r1-1776_latest,R1-1776,2179,1167,21,226,765,168.48582995951418,1.5844728271882836e-38,***,Prediction change,source,Source
+gemini-2.5-flash-lite,Gemini 2.5,2179,1549,314,108,208,99.58530805687204,1.8789314065311095e-23,***,Prediction change,politics,Politics
+gemma3_27b,Gemma3 27B,2179,1227,484,82,377,284.10070671378094,9.594091348016788e-64,***,Prediction change,politics,Politics
+gpt-4o-mini,GPT-4o mini,2179,1695,296,54,134,165.94571428571427,5.684918607919527e-38,***,Prediction change,politics,Politics
+gpt-5.4-mini,GPT-5.4 mini,2179,1605,61,96,417,7.3630573248407645,0.006657749112078242,**,Prediction change,politics,Politics
+llama3.2_3b,Llama 3.2 3B,2179,951,119,72,1037,11.078534031413612,0.0008733281623191072,***,Prediction change,politics,Politics
+llama4_scout,Llama 4 Scout,2179,1280,199,57,643,77.66015625,1.2238538475825394e-18,***,Prediction change,politics,Politics
+phi4-mini,Phi4 mini,2179,277,247,63,1592,108.02903225806452,2.6486977461356392e-25,***,Prediction change,politics,Politics
+qwen3_30b,Qwen3 30B,2179,1983,144,27,25,78.69005847953217,7.266030760739788e-19,***,Prediction change,politics,Politics
+qwen3_4b,Qwen3 4B,2179,2017,81,52,29,5.894736842105263,0.015186198557064549,*,Prediction change,politics,Politics
+r1-1776_latest,R1-1776,2179,833,355,126,865,108.07484407484408,2.588177495143241e-25,***,Prediction change,politics,Politics
+gemini-2.5-flash-lite,Gemini 2.5,2179,1604,259,105,211,64.31043956043956,1.062811046281319e-15,***,Prediction change,source_politics,Source + Politics
+gemma3_27b,Gemma3 27B,2179,1175,542,132,330,248.19139465875372,6.43780135491587e-56,***,Prediction change,source_politics,Source + Politics
+gpt-4o-mini,GPT-4o mini,2179,1276,715,44,144,591.4361001317523,1.220499419699577e-130,***,Prediction change,source_politics,Source + Politics
+gpt-5.4-mini,GPT-5.4 mini,2179,1575,91,131,382,6.851351351351352,0.008857425233010911,**,Prediction change,source_politics,Source + Politics
+llama3.2_3b,Llama 3.2 3B,2179,774,296,69,1040,139.93424657534246,2.7516457453008707e-32,***,Prediction change,source_politics,Source + Politics
+llama4_scout,Llama 4 Scout,2179,1203,276,37,663,180.97124600638978,2.974137172016631e-41,***,Prediction change,source_politics,Source + Politics
+phi4-mini,Phi4 mini,2179,330,194,1041,614,579.5271255060728,4.752702477435029e-128,***,Prediction change,source_politics,Source + Politics
+qwen3_30b,Qwen3 30B,2179,1954,173,30,22,99.33004926108374,2.1374024223312436e-23,***,Prediction change,source_politics,Source + Politics
+qwen3_4b,Qwen3 4B,2179,1981,117,45,36,31.117283950617285,2.428989004567689e-08,***,Prediction change,source_politics,Source + Politics
+r1-1776_latest,R1-1776,2179,805,383,177,814,75.04464285714286,4.6018993513663515e-18,***,Prediction change,source_politics,Source + Politics
+gemini-2.5-flash-lite,Gemini 2.5,2179,1835,28,136,180,69.8109756097561,6.526869454645919e-17,***,Prediction change,source_demographic,Source + Demographic
+gemma3_27b,Gemma3 27B,2179,1446,271,82,380,100.12464589235128,1.4310168141518514e-23,***,Prediction change,source_demographic,Source + Demographic
+gpt-4o-mini,GPT-4o mini,2179,1842,149,18,170,101.19760479041916,8.324993643517528e-24,***,Prediction change,source_demographic,Source + Demographic
+gpt-5.4-mini,GPT-5.4 mini,2179,1598,68,113,400,10.696132596685082,0.0010735972726730908,**,Prediction change,source_demographic,Source + Demographic
+llama3.2_3b,Llama 3.2 3B,2179,765,305,69,1040,147.66042780748663,5.628083630185841e-34,***,Prediction change,source_demographic,Source + Demographic
+llama4_scout,Llama 4 Scout,2179,1432,47,73,627,5.208333333333333,0.02247887336612532,*,Prediction change,source_demographic,Source + Demographic
+phi4-mini,Phi4 mini,2179,486,38,382,1273,280.1166666666667,7.082269831329984e-63,***,Prediction change,source_demographic,Source + Demographic
+qwen3_30b,Qwen3 30B,2179,2074,53,29,23,6.451219512195122,0.011087621088163937,*,Prediction change,source_demographic,Source + Demographic
+qwen3_4b,Qwen3 4B,2179,2025,73,49,32,4.336065573770492,0.03731305320219145,*,Prediction change,source_demographic,Source + Demographic
+r1-1776_latest,R1-1776,2179,1099,89,175,816,27.367424242424242,1.6824162423536665e-07,***,Prediction change,source_demographic,Source + Demographic
+gemini-2.5-flash-lite,Gemini 2.5,2179,1610,253,115,201,51.00271739130435,9.223818493612415e-13,***,Prediction change,politics_demographic,Politics + Demographic
+gemma3_27b,Gemma3 27B,2179,1373,344,98,364,135.80316742081448,2.2032352029690377e-31,***,Prediction change,politics_demographic,Politics + Demographic
+gpt-4o-mini,GPT-4o mini,2179,1587,404,42,146,292.19955156950675,1.6493015647351653e-65,***,Prediction change,politics_demographic,Politics + Demographic
+gpt-5.4-mini,GPT-5.4 mini,2179,1570,96,95,418,0.0,1.0,ns,Prediction change,politics_demographic,Politics + Demographic
+llama3.2_3b,Llama 3.2 3B,2179,913,157,80,1029,24.371308016877638,7.94431314382419e-07,***,Prediction change,politics_demographic,Politics + Demographic
+llama4_scout,Llama 4 Scout,2179,1293,186,30,670,111.22685185185185,5.277287529638337e-26,***,Prediction change,politics_demographic,Politics + Demographic
+phi4-mini,Phi4 mini,2179,295,229,550,1105,131.45057766367137,1.9732644238286563e-30,***,Prediction change,politics_demographic,Politics + Demographic
+qwen3_30b,Qwen3 30B,2179,1973,154,25,27,91.53072625698324,1.0987281497335102e-21,***,Prediction change,politics_demographic,Politics + Demographic
+qwen3_4b,Qwen3 4B,2179,2036,62,49,32,1.2972972972972974,0.25470749409104043,ns,Prediction change,politics_demographic,Politics + Demographic
+r1-1776_latest,R1-1776,2179,804,384,75,916,206.67538126361657,7.298445496354524e-47,***,Prediction change,politics_demographic,Politics + Demographic
+gemini-2.5-flash-lite,Gemini 2.5,2179,1630,233,120,196,35.53541076487252,2.5045586931376313e-09,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+gemma3_27b,Gemma3 27B,2179,1172,545,118,344,273.71945701357464,1.7550517928371962e-61,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+gpt-4o-mini,GPT-4o mini,2179,1352,639,66,122,464.090780141844,6.189781578326495e-103,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+gpt-5.4-mini,GPT-5.4 mini,2179,1572,94,127,386,4.633484162895928,0.03135383035982695,*,Prediction change,source_politics_demographic,Source + Politics + Demographic
+llama3.2_3b,Llama 3.2 3B,2179,758,312,120,989,84.44675925925925,3.947017062758044e-20,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+llama4_scout,Llama 4 Scout,2179,1202,277,45,655,165.7173913043478,6.376750594655516e-38,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+phi4-mini,Phi4 mini,2179,335,189,1048,607,595.1204527081649,1.9281755232393421e-131,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+qwen3_30b,Qwen3 30B,2179,1938,189,25,27,124.15420560747664,7.794457750861933e-29,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+qwen3_4b,Qwen3 4B,2179,1982,116,52,29,23.625,1.17056806136325e-06,***,Prediction change,source_politics_demographic,Source + Politics + Demographic
+r1-1776_latest,R1-1776,2179,770,418,166,825,107.87842465753425,2.8578142856395763e-25,***,Prediction change,source_politics_demographic,Source + Politics + Demographic

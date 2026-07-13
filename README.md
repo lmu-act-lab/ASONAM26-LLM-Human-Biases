@@ -135,3 +135,41 @@ python src/model_runner/main.py \
 ```
 
 Available flags include `--provider`, `--file-type`, `--model`, `--version`, `--output-dir`, `--workers`, `--checkpoint-size`, `--model-temperature`, `--context-length`, `--include-explanation`, `--include-prompted-cot`, `--include-native-cot`, `--include-chained-prompts`, `--reasoning-effort`, `--reasoning-summary`, `--openai-mode`, and `--ollama-server-port`.
+
+### 3. Run Analysis Scripts (Q1 - Q5)
+
+Each analysis file in [src/analysis](src/analysis) is designed to answer one research question. These scripts use relative paths (for example, `../../results` and `../../data`), so run them from inside [src/analysis](src/analysis).
+
+Run from repository root:
+
+```bash
+cd src/analysis
+```
+
+Question-to-script mapping:
+
+- Q1 (model vs human alignment): [src/analysis/most_aligned_models.py](src/analysis/most_aligned_models.py)
+- Q2 (alignment by annotator politics): [src/analysis/models_align_with_politics.py](src/analysis/models_align_with_politics.py)
+- Q3 (inter-model agreement): [src/analysis/inter_model.py](src/analysis/inter_model.py)
+- Q4 (metadata sensitivity): [src/analysis/metadata_analysis.py](src/analysis/metadata_analysis.py)
+- Q5 (reasoning structure effects): [src/analysis/cot_analysis.py](src/analysis/cot_analysis.py)
+- Human-human reliability baseline used in Q1 context: [src/analysis/data_analysis.py](src/analysis/data_analysis.py)
+
+Run all question scripts:
+
+```bash
+python most_aligned_models.py
+python models_align_with_politics.py
+python inter_model.py
+python metadata_analysis.py
+python cot_analysis.py
+python data_analysis.py
+```
+
+Outputs:
+
+- CSV outputs are written under [analysis_reports](analysis_reports) in question-specific folders, each with a `csv` subfolder.
+- Figures are written in the corresponding `figures` subfolders.
+- The scripts create output folders automatically if they do not exist.
+
+
