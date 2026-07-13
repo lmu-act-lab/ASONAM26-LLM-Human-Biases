@@ -31,7 +31,6 @@ all_llm["human_label"] = all_llm["human_label"].astype(int)
 
 utils.save_csv(all_llm, "q4_metadata_all_outputs_long_row_level.csv", index=False)
 
-# Build baseline dataframe mask cuts
 baseline = all_llm[all_llm["Prompt"] == "article_only"][[
     "Model", "article_id", "index", "llm_label", "llm_confidence", 
     "human_label", "source", "politics", "age", "gender"
@@ -56,12 +55,10 @@ for metadata_condition in Constants.METADATA_ORDER:
     compare["Metadata_Label"] = meta_label
     compare["metadata_aligned"] = (compare["metadata_output"] == compare["human_label"]).astype(int)
 
-    # Compile long summaries tables arrays
     compare_frames.append(compare)
     flip_frames.append(utils.summarize_prediction_flips(compare, "article_only_output", "metadata_output", context_fields={"Metadata_Condition": metadata_condition, "Metadata_Label": meta_label}))
     alignment_frames.append(utils.summarize_alignment_change(compare, "article_only_aligned", "metadata_aligned", context_fields={"Metadata_Condition": metadata_condition, "Metadata_Label": meta_label}))
     
-    # Run structural McNemar statistical test suites
     prediction_mcnemar_frames.append(utils.run_mcnemar_by_model(compare, before_col="article_only_output", after_col="metadata_output", context_fields={"Metadata_Condition": metadata_condition, "Metadata_Label": meta_label}, test_type="Prediction change"))
     alignment_mcnemar_frames.append(utils.run_mcnemar_by_model(compare, before_col="article_only_aligned", after_col="metadata_aligned", context_fields={"Metadata_Condition": metadata_condition, "Metadata_Label": meta_label}, test_type="Alignment change"))
 
@@ -83,7 +80,6 @@ for metadata_condition in Constants.METADATA_ORDER:
             "Baseline_Bias_Rate": base_bias, "Metadata_Bias_Rate": meta_bias, "Delta_Bias_Rate": meta_bias - base_bias
         })
 
-# Concat long summary frame collections
 compare_df = pd.concat(compare_frames, ignore_index=True)
 flip_df = pd.concat(flip_frames, ignore_index=True)
 alignment_change_df = pd.concat(alignment_frames, ignore_index=True)

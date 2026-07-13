@@ -16,7 +16,7 @@ utils = Utils("question1/")
 output_parent_dir = utils.csv_dir.parent
 
 
-def _render_horizontal_barplot(metric_series, xlabel, filename, value_fmt="{:.2f}", offset=0.006, zero_line=False, xlim=None):
+def _plot_horizontal_barplot(metric_series, xlabel, filename, value_fmt="{:.2f}", offset=0.006, zero_line=False, xlim=None):
     """Unified engine to build organized paper-ready horizontal chart plots."""
     df = metric_series.reset_index()
     df.columns = ["Model", "Metric"]
@@ -94,7 +94,6 @@ row_level_df = human_df.merge(llm_df, on="index", how="inner", suffixes=("_human
 row_level_df["article_id"] = row_level_df["article_id_human"]
 row_level_df["Aligned"] = (row_level_df["llm_label"] == row_level_df["human_label"]).astype(int)
 
-# Inject consensus baseline features metrics
 human_article_stats = human_df.groupby("article_id")["human_label"].agg(
     human_bias_rate="mean", num_raters="count"
 ).reset_index()
@@ -107,7 +106,6 @@ print("\n" + "=" * 60 + "\nFitting Logit Models...")
 model_simple = smf.logit("Aligned ~ C(Model)", data=row_level_df).fit()
 model_with_human_bias_rate = smf.logit("Aligned ~ C(Model) + human_bias_rate", data=row_level_df).fit()
 
-# Write summaries text directly via Path
 (output_parent_dir / "q1_row_level_model_only_summary.txt").write_text(str(model_simple.summary()))
 (output_parent_dir / "q1_row_level_model_human_bias_summary.txt").write_text(str(model_with_human_bias_rate.summary()))
 
@@ -133,9 +131,9 @@ utils.save_csv(weighted_acc, "q1_row_level_weighted_ranking.csv")
 utils.save_csv(kappa_scores, "q1_row_level_kappa.csv")
 utils.save_csv(model_bias_rate, "q1_row_level_bias_prediction_rate.csv", header=["bias_prediction_rate"])
 
-_render_horizontal_barplot(ranking, "Accuracy", "q1_accuracy_paper")
-_render_horizontal_barplot(weighted_acc, "Weighted accuracy", "q1_weighted_accuracy_paper")
-_render_horizontal_barplot(kappa_scores, "Cohen's kappa", "q1_kappa_paper", zero_line=True)
-_render_horizontal_barplot(model_bias_rate, "Proportion predicted as biased", "q1_bias_prediction_rate_paper", xlim=(0, 1))
+_plot_horizontal_barplot(ranking, "Accuracy", "q1_accuracy_paper")
+_plot_horizontal_barplot(weighted_acc, "Weighted accuracy", "q1_weighted_accuracy_paper")
+_plot_horizontal_barplot(kappa_scores, "Cohen's kappa", "q1_kappa_paper", zero_line=True)
+_plot_horizontal_barplot(model_bias_rate, "Proportion predicted as biased", "q1_bias_prediction_rate_paper", xlim=(0, 1))
 
 print(f"\nExecution success!\nSaved logs to: {output_parent_dir}\nSaved figures to: {utils.figure_dir}")
