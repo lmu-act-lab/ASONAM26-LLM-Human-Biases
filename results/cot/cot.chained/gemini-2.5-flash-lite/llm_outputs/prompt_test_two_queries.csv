@@ -1,0 +1,2 @@
+article_id,index,llm_assessment,llm_confidence,llm_model,llm_error,llm_thought_process,llm_explanation
+100001,0,is-not-biased,95,gemini-2.5-flash-lite,,``,"The article presents both sides of the issue, including the vote count, the stated benefits of the plan, and the criticisms, without showing a preference for either viewpoint."

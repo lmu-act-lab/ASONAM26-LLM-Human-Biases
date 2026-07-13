@@ -1,0 +1,2 @@
+article_id,index,llm_assessment,llm_confidence,llm_model,llm_error,llm_thought_process,llm_explanation
+100001,0,is-not-biased,85,gpt-4o-mini,,,"The article presents both supporters' and critics' views without exaggeration or distortion, maintaining a neutral tone."
